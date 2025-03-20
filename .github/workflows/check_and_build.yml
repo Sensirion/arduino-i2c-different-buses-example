@@ -28,7 +28,8 @@ jobs:
           mkdir -p $CLI_PATH
           export PATH=$PATH:$CLI_PATH
           curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=$CLI_PATH sh
-
+      - name: Install ESP32 platform dependencies
+        run: pip3 install pyserial
       - name: build sketch
         run: |
           ${CLI_PATH}/arduino-cli compile --profile espressif-esp32 ./esp32-different-i2c-buses-example
