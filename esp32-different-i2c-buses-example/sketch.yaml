@@ -1,0 +1,8 @@
+profiles:
+  espressif-esp32:
+    fqbn: esp32:esp32:esp32doit-devkit-v1
+    platforms:
+      - platform: arduino:avr (1.8.6)
+    libraries:
+      - Sensirion I2C SCD4x (1.0.0)
+      - Sensirion Core (0.7.0)
