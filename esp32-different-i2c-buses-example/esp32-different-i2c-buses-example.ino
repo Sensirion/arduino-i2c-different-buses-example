@@ -49,53 +49,6 @@ SensirionI2cScd4x sensorB;
 bool sensorAOk;
 bool sensorBOk;
 
-void setup() {
-    Serial.begin(115200);
-    while (!Serial) {
-        delay(100);
-    }
-
-    // initialize the first sensor on default I2C pins SDA Pin 21, SCL Pin 22
-    Wire.begin();
-    sensorA.begin(Wire, SCD41_I2C_ADDR_62);
- 
-    // initialize the second sensor on custom I2C pins, here we use for SDA Pin 16 and for SCl Pin 17.
-    // you should be able to choose any GPIO Pin
-    const int sda_B = 16;
-    const int scl_B = 17;
-    Wire1.begin(sda_B, scl_B);
-    sensorB.begin(Wire1, SCD41_I2C_ADDR_62);
-
-    Serial.println("----SENSOR A-----");
-    sensorAOk = initSensor(sensorA);
-    if(sensorAOk) {
-      sensorAOk = startMeasurement(sensorA);
-    }
-
-    Serial.println("----SENSOR B-----");
-    sensorBOk = initSensor(sensorB);
-    if(sensorBOk) {
-      sensorBOk = startMeasurement(sensorB);
-    }
-
-}
-
-void loop() {
-    //
-    // Slow down the sampling to 0.2Hz.
-    //
-    delay(5000);
-
-    if(sensorAOk) {
-      Serial.println("----SENSOR A-----");
-      readAndPrintMeasurement(sensorA);
-    }
-    if(sensorBOk) {
-      Serial.println("----SENSOR B-----");
-      readAndPrintMeasurement(sensorB);
-    }
-}
-
 void PrintUint64(uint64_t& value) {
     Serial.print("0x");
     Serial.print((uint32_t)(value >> 32), HEX);
@@ -150,7 +103,6 @@ bool startMeasurement(SensirionI2cScd4x sensor) {
     return true;
 }
 
-
 // Read measurements from the sensor and print to the console
 // The method blocks until measurements are ready
 void readAndPrintMeasurement(SensirionI2cScd4x sensor) {
@@ -195,4 +147,51 @@ void readAndPrintMeasurement(SensirionI2cScd4x sensor) {
     Serial.print("Relative Humidity [RH]: ");
     Serial.print(relativeHumidity);
     Serial.println();
+}
+
+void setup() {
+    Serial.begin(115200);
+    while (!Serial) {
+        delay(100);
+    }
+
+    // initialize the first sensor on default I2C pins SDA Pin 21, SCL Pin 22
+    Wire.begin();
+    sensorA.begin(Wire, SCD41_I2C_ADDR_62);
+ 
+    // initialize the second sensor on custom I2C pins, here we use for SDA Pin 16 and for SCl Pin 17.
+    // you should be able to choose any GPIO Pin
+    const int sda_B = 16;
+    const int scl_B = 17;
+    Wire1.begin(sda_B, scl_B);
+    sensorB.begin(Wire1, SCD41_I2C_ADDR_62);
+
+    Serial.println("----SENSOR A-----");
+    sensorAOk = initSensor(sensorA);
+    if(sensorAOk) {
+      sensorAOk = startMeasurement(sensorA);
+    }
+
+    Serial.println("----SENSOR B-----");
+    sensorBOk = initSensor(sensorB);
+    if(sensorBOk) {
+      sensorBOk = startMeasurement(sensorB);
+    }
+
+}
+
+void loop() {
+    //
+    // Slow down the sampling to 0.2Hz.
+    //
+    delay(5000);
+
+    if(sensorAOk) {
+      Serial.println("----SENSOR A-----");
+      readAndPrintMeasurement(sensorA);
+    }
+    if(sensorBOk) {
+      Serial.println("----SENSOR B-----");
+      readAndPrintMeasurement(sensorB);
+    }
 }
