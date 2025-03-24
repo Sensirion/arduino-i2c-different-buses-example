@@ -32,7 +32,6 @@
 #include <SensirionI2cScd4x.h>
 #include <Wire.h>
 
-
 // macro definitions
 // make sure that we use the proper definition of NO_ERROR
 #ifdef NO_ERROR
@@ -106,11 +105,11 @@ bool startMeasurement(SensirionI2cScd4x sensor) {
 // Read measurements from the sensor and print to the console
 // The method blocks until measurements are ready
 void readAndPrintMeasurement(SensirionI2cScd4x sensor) {
-      bool dataReady = false;
+    bool dataReady = false;
     uint16_t co2Concentration = 0;
     float temperature = 0.0;
     float relativeHumidity = 0.0;
-    
+
     error = sensor.getDataReadyStatus(dataReady);
     if (error != NO_ERROR) {
         Serial.print("Error trying to execute getDataReadyStatus(): ");
@@ -158,9 +157,9 @@ void setup() {
     // initialize the first sensor on default I2C pins SDA Pin 21, SCL Pin 22
     Wire.begin();
     sensorA.begin(Wire, SCD41_I2C_ADDR_62);
- 
-    // initialize the second sensor on custom I2C pins, here we use for SDA Pin 16 and for SCl Pin 17.
-    // you should be able to choose any GPIO Pin
+
+    // initialize the second sensor on custom I2C pins, here we use for SDA Pin
+    // 16 and for SCl Pin 17. you should be able to choose any GPIO Pin
     const int sda_B = 16;
     const int scl_B = 17;
     Wire1.begin(sda_B, scl_B);
@@ -168,16 +167,15 @@ void setup() {
 
     Serial.println("----SENSOR A-----");
     sensorAOk = initSensor(sensorA);
-    if(sensorAOk) {
-      sensorAOk = startMeasurement(sensorA);
+    if (sensorAOk) {
+        sensorAOk = startMeasurement(sensorA);
     }
 
     Serial.println("----SENSOR B-----");
     sensorBOk = initSensor(sensorB);
-    if(sensorBOk) {
-      sensorBOk = startMeasurement(sensorB);
+    if (sensorBOk) {
+        sensorBOk = startMeasurement(sensorB);
     }
-
 }
 
 void loop() {
@@ -186,12 +184,12 @@ void loop() {
     //
     delay(5000);
 
-    if(sensorAOk) {
-      Serial.println("----SENSOR A-----");
-      readAndPrintMeasurement(sensorA);
+    if (sensorAOk) {
+        Serial.println("----SENSOR A-----");
+        readAndPrintMeasurement(sensorA);
     }
-    if(sensorBOk) {
-      Serial.println("----SENSOR B-----");
-      readAndPrintMeasurement(sensorB);
+    if (sensorBOk) {
+        Serial.println("----SENSOR B-----");
+        readAndPrintMeasurement(sensorB);
     }
 }
