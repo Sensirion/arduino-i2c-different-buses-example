@@ -18,23 +18,46 @@ Where can Pull-up Resistors be placed:
 
 1. on the development board you are connecting 
 2. on the micro-controller
-3. manually wired on the SDA and SCL line between micro-controller and development board, e.g. by using a bread board
+3. manually wired on the SDA and SCL line between micro-controller and development board, e.g. by using a bread board 
+
+So your development board or micro-controller has Pull-Ups built in, you should be good to go. The ESP32 DevKit 4 has PullUps built in, but for example STM32 Nucleo. 
 
 Pull-up resistors are connected from SDA resp SCL line to positive supply voltage. Standard resistor values are 4.7 kΩ or 10 kΩ. You might also find a optimal Pull-up resistor value for your sensor in the sensor or development board datasheet.
 
 If there are Pull-up resistors on the board and the micro-controller, the Pull-up resistances are in parallel meaning that there overall value drops. This could well lead to a too small Pull-up resistance, meaning that your devices cannot drive the lines to the low level reliably anymore.
 
-The Pull-up resistance value depends also on the I2C bus frequency you want to use. In this tutorial we use the default frequency of 100kHz.
+The Pull-up resistance value depends on different factors. If you can log the signals with an Logic Analyzer or Oscilloscope, you check that the waveform of your I2c signals has quite sharp edgeds, which means your resistor setup is good.
 
-The good news is that for the example we do here with an ESP32 DevKit, you do not need to do anything to configure or wire Pull-up resistoras as it is handled by the board. 
+For example, you see the signal of a SEK SCD41 connected to a Nucleo 64 board. Neither the SEK SCD41 nor the Nucleo 64 board has Pull Up resistors included. Thus, we need to wire in a resistor between VDD and each SDA/SCL lines. One resistor per line. 
 
-# Wiring
+**Too low** If you have too low resistance or no Pull-Up's, the lines will be floating. In the setup here, you see that both lines are low (0V) in idle state. When the master tries to communicate, you see some signal but the SDA line is actually just following the clock signal.
+
+Trace of setup with no resistors:
+![LogicAnalyzer Snapshot with NO resistors](images/Nucleo64_I2c_No_PullUps.png)
+
+**Good** If your resistors are dimensioned well, the signal shape looks quite rectangular. The lower the resistor, the better the rectangular shape should be. 
+Note as well that at the beginning of the trace you see that both, SDA and SCL line in high state (~3.3V).
+
+Trace of setup with 2.2kOhm resistors:
+
+![LogicAnalyzer Snapshot with 2.2kOhm resistors](images/Nucleo64_I2c_2p2kOhm_PullUps.png)
+
+**Too big** If your resistors are too big, the signal does recover to high state too slow and might not reach the maximum anymore (max reached in the trace during communication is ~3.1V). 
+
+Trace of setup with 18kOhm resistors:
+
+![LogicAnalyzer Snapshot with 18kOhm resistors](images/Nucleo64_I2c_18kOhm_PullUps.png)
+
+
+# ESP32 DevKitC - Wiring & Software Setup
 
 First, we need to define the Pins we use for the two I2C Buses.
 For I2C Bus A we can use the default I2C Pins of the board. For the ESP32 DevKitC those are Pin 21 (SCL) and 22 (SDA). 
 For I2C Bus B, we can choose any GPIO (General Purpose Input Output) pins. On the ESP32 DevKitC, all pins can be used. If you have another board, check the specification to see if some pins have a special configuration and cannot be used as a general GPIO pin. We chose Pin 17 and 16.
 As our sensor works with 3.3V as well as 5V, we can plug in one sensor at the 3V pin and the other at the 5V pin. Otherwise you would have to connect both sensors to the respective pin, e.g. over a bread board.
 With that information, the wiring should be done as follwoing:
+
+![Wiring diagram SEK SCD41 to ESP32 DevKitC](images/wirigngTwoSCD41ToESP.png)
 
     SEK-SCD41 A - Pin 1 to ESP32 Pin 22 (SCL, yellow cable) 
     SEK-SCD41 A - Pin 2 to ESP32 GND (Ground, black cable) 
@@ -49,14 +72,10 @@ With that information, the wiring should be done as follwoing:
 
 What we have to remember for the configuration in the software later is the pins we used for the second I2C Bus, namely pin 17 for I2C clock (SCL) and pin 18 for I2C data (SDA).
 
-The ESP32 DevKitC Board does make sure that GPIO lines are pulled to high state. So you do not manually wire or configure Pull Up resistors for the pins you are going to use. For more on Pull ups !!!! TODO !!!
-
-For other boards, you find the default I2C wiring on: https://docs.arduino.cc/learn/communication/wire/
-
-# Software I2C Bus Setup
+You can also follow the wiring diagram:
 
 
-Depending on your board and the implementation, there is a second Wire1 object predefined. If not, you have to dig one layer deeper and instantiate a TwoWire object and assign the correct pins. There is a good explanation with different variants for the ESP32 boards using the Arduino IDE: https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/
+The ESP32 DevKitC Board does make sure that GPIO lines are pulled to high state. So you do not manually wire or configure Pull Up resistors for the pins you are going to use.
 
 For the ESP32 on Arduino IDE Platform there is a predefined instance of "TwoWire" named "Wire" which is configured for the default I2C Bus on pins 21/22. 
 We can use this instance without any modification for the sensor attached to the "I2C Bus A" (default I2C Bus).
@@ -69,9 +88,7 @@ const int scl_B = 17;
 Wire1.begin(sda_B, scl_B);
 ```
 
-# Software Sensor Communication
-
-The code sending the commands to the sensor over the I2C Bus needs to know wich Bus to use for which sensor. 
+Then, the code sending the commands to the sensors over the I2C Bus needs to know wich bus to use for which sensor. 
 Thus, you need to configure the sensors instances accordingly. First, create a driver instance per sensor. 
 This should be done outside of any function, such that those can be refered to from within `setup()` and `loop()`.
 
@@ -90,4 +107,18 @@ sensorB.begin(Wire1, SCD41_I2C_ADDR_62);
 Look out that you really have `Wire1` assigned for sensorB, so that it uses the custom set up I2C Bus.
 
 Know you can issue any I2C command on the sensor, e.g. starting the measurement and reading out values. 
-The full example code is linked.
+The full example code is linked. 
+
+```
+sensorA.startMeasurement();
+sensorB.startMeasurement();
+...
+```
+
+
+# Other Boards - Wiring & Software setup
+
+For other boards, you find the default I2C wiring on: https://docs.arduino.cc/learn/communication/wire/
+
+
+Depending on your board and the implementation, there is a second Wire1 object predefined. If not, you have to dig one layer deeper and instantiate a TwoWire object and assign the correct pins. There is a good explanation with different variants for the ESP32 boards using the Arduino IDE: https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/
