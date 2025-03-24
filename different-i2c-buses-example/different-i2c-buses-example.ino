@@ -39,6 +39,23 @@
 #endif
 #define NO_ERROR 0
 
+
+// CHOOSE YOUR BOARD HERE
+
+//#define ESP32_DEVKITC_V4 1
+#define STM32_NUCLEO_64 1
+ 
+#if STM32_NUCLEO_64
+    // I2C Bus on Pins 14 (SDA) / 15 (SCL)
+    const int sda_A = 14;
+    const int scl_A = 15;
+    TwoWire i2cBusA(sda_A, scl_A);
+    // I2C Bus on Pins 3 (SDA) / 6 (SCL)
+    const int sda_B = 3;
+    const int scl_B = 6;
+    TwoWire i2cBusB(sda_B, scl_B);
+#endif
+
 static char errorMessage[64];
 static int16_t error;
 
@@ -148,12 +165,9 @@ void readAndPrintMeasurement(SensirionI2cScd4x sensor) {
     Serial.println();
 }
 
-void setup() {
-    Serial.begin(115200);
-    while (!Serial) {
-        delay(100);
-    }
-
+void initI2c() {
+  #if ESP32_DEVKITC_V4
+  
     // initialize the first sensor on default I2C pins SDA Pin 21, SCL Pin 22
     Wire.begin();
     sensorA.begin(Wire, SCD41_I2C_ADDR_62);
@@ -164,6 +178,33 @@ void setup() {
     const int scl_B = 17;
     Wire1.begin(sda_B, scl_B);
     sensorB.begin(Wire1, SCD41_I2C_ADDR_62);
+
+    Serial.println("I2C Buses configured for ESP32 DevKitC V4 Board.");
+    Serial.printf("I2C Bus A SDA Pin 21, SCL Pin 22; I2C Bus B SDA Pin %i, SCL PIN %i\n", sda_B, scl_B);
+
+  #elif STM32_NUCLEO_64
+
+    i2cBusA.begin();
+    sensorA.begin(i2cBusA, SCD41_I2C_ADDR_62);
+
+    i2cBusB.begin();
+    sensorB.begin(i2cBusB, SCD41_I2C_ADDR_62);
+
+    Serial.println("I2C Buses configured for STM32 Nucleo 64 Board.");
+    Serial.printf("I2C Bus A SDA Pin %i, SCL Pin %i; I2C Bus B SDA Pin %i, SCL PIN %i\n", sda_A, scl_A, sda_B, scl_B);
+
+  #endif
+}
+
+
+void setup() {
+    Serial.begin(115200);
+    while (!Serial) {
+        delay(100);
+    }
+
+    // CONFIGURE YOUR BOARD AT THE BEGINNING OF THIS FILE
+    initI2c();
 
     Serial.println("----SENSOR A-----");
     sensorAOk = initSensor(sensorA);
