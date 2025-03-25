@@ -155,6 +155,8 @@ sensorB.startMeasurement();
 ...
 ```
 
+You can find more details and options how to configure several I2C buses on the ESP32 platform using the Arduino IDE: https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/
+
 # STM32 Nucleo 64 Board
 
 The STM32 Nucleo 64 board has pre-defined I2C pins. We use I2C1 (SDA on pin 14, SCL on pin 15) and 
@@ -227,11 +229,76 @@ sensorB.startMeasurement();
 ...
 ```
 
-# Other Boards - Wiring & Software setup
+# Arduino Uno R4 WIFI
 
-For other Arduino boards, you find the default I2C wiring on: https://docs.arduino.cc/learn/communication/wire/
+The Arduino Uno R4 WIFI provides one I2C bus on the pin header, which has no pullups on the board.
+The second I2C bus is on the Qwiic. We use here the breakout board from Adafruit.
+The board includes 10K pullup on SDA and SCL.
 
-Depending on your board and the implementation, there is a second Wire1 object predefined. If not, you have to dig one
-layer deeper and instantiate a TwoWire object and assign the correct pins. There is a good explanation with different
-variants for the ESP32 boards using the Arduino
-IDE: https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/
+Following the wiring needed:
+
+SEK-SCD41 Pin 1 to R.1 (SCL, yellow)
+R.1 to Ardunio Pin SCL (yellow)
+R.1 to Arduino 3V3
+SEK-SCD41 Pin 2 to Arduino GND
+SEK-SCD41 Pin 3 to Arduino 3V3
+SEK-SCD41 Pin 4 to R.2 (SDA, green)
+R.2 to Arduino Pin 14 (green)
+R.2 to Arduino 3V3
+
+Adafruit SCD41 to Arduino Qwiic
+
+The diagram shows the wiring using a breadboard to connect the pull-up resistors.
+
+![Wiring diagram SEK SCD41 and Adafruit SCD41 to Arduino Uno R4](images/wirigngTwoSCD41ToSTM32Nucleo64.png)
+
+## Software setup
+
+First, you need to include the Wire library:
+
+```
+#include <Wire.h>
+```
+
+For the Arduino Uno R4, this library defines two I2C buses. The first, "Wire" is configured 
+for the SDA/SCL pins on the pin header, where "Wire1" is configured for the Qwiic connector.
+We can use those two instances without any further configuration. You just need to initialize them:
+
+```
+Wire.begin();
+Wire1.begin();
+```
+
+Then, the code sending the commands to the sensors over the I2C bus needs to know which bus to use for which sensor.
+Thus, you need to configure the sensor instances accordingly. First, create a driver instance per sensor.
+Their scope should be global, such that those can be referred to from within `setup()` and `loop()`.
+
+```
+SensirionI2cScd4x sensorOnPins;
+SensirionI2cScd4x sensorOnQwiic;
+```
+
+Next, in the `setup()` function, assign the I2C buses to the sensors:
+
+```
+sensorOnPins.begin(Wire, SCD41_I2C_ADDR_62);
+sensorOnQwiic.begin(Wire1, SCD41_I2C_ADDR_62);
+```
+
+Look out that you really have `Wire1` assigned for `sensorOnQwiic`.
+
+You can now send any I2C command to the sensor, such as initiating the measurement and retrieving values.
+The complete example code is provided in the link.
+
+```
+sensorOnPins.startMeasurement();
+sensorOnQwiic.startMeasurement();
+...
+```
+
+# Other Ardiuino Boards
+
+Documentation for Arduino boards can be found on: https://docs.arduino.cc/language-reference/en/functions/communication/wire/.
+Note that not all boards support multiple I2C buses and that it is recommended to use a custom pull-up resistor configuration,
+as the built in resistors are most likely dimensioned too big.
+

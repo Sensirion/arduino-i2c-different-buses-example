@@ -43,7 +43,8 @@
 // CHOOSE YOUR BOARD HERE
 
 //#define ESP32_DEVKITC_V4 1
-#define STM32_NUCLEO_64 1
+//#define STM32_NUCLEO_64 1
+#define ARDUINO_UNO_R4_WIFI 1
  
 #if STM32_NUCLEO_64
     // I2C Bus on Pins 14 (SDA) / 15 (SCL)
@@ -193,6 +194,18 @@ void initI2c() {
     Serial.println("I2C Buses configured for STM32 Nucleo 64 Board.");
     Serial.printf("I2C Bus A SDA Pin %i, SCL Pin %i; I2C Bus B SDA Pin %i, SCL PIN %i\n", sda_A, scl_A, sda_B, scl_B);
 
+  #elif ARDUINO_UNO_R4_WIFI
+    // initialize the first sensor (SEK-SCD41) on default I2C pins SDA (D18), SCL (D19)
+    Wire.begin();
+    sensorA.begin(Wire, SCD41_I2C_ADDR_62);
+
+    // initialize the second sensor (Adafruit SCD41 breakout board) on QWIIC connector
+    Wire1.begin();
+    sensorB.begin(Wire1, SCD41_I2C_ADDR_62);
+
+    Serial.println("I2C Buses configured for Arduino Uno R4 WIFI.");
+    Serial.print("I2C Bus A on pins SDA (D18), SCL (D19); I2C Bus B Qwiic Connector.");
+
   #endif
 }
 
@@ -204,6 +217,7 @@ void setup() {
     }
 
     // CONFIGURE YOUR BOARD AT THE BEGINNING OF THIS FILE
+
     initI2c();
 
     Serial.println("----SENSOR A-----");
