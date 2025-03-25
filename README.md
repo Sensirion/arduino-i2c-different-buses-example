@@ -24,10 +24,10 @@ initialize one with the standard I2C bus and the other with the custom I2C bus.
 
 # Pull Up Resistors on I2C Lines
 
-When examining the I2C protocol, you will observe that the I2C SCL and SDA lines remain in a high state when idle. 
+When examining the I2C protocol, you will observe that the I2C SCL and SDA lines remain in a high state when idle.
 When the I2C leader or follower communicate, they pull the line to a low state. To return the lines to a
 high state, external components known as pull-up resistors are required. Without these pull-ups, the lines would be left
-floating, resulting in an undefined state. This leads to incorrect detection of the low state and introduces 
+floating, resulting in an undefined state. This leads to incorrect detection of the low state and introduces
 errors in your communication.
 
 Having pull-up resistors in place is essential for ensuring good signal quality and reliable data exchange. If you are
@@ -41,7 +41,7 @@ Where can pull-up resistors be placed:
 3. Manually wired on the SDA and SCL lines between the microcontroller and development board, for example, by using a
    breadboard.
 
-So if your development board or microcontroller has pull-ups built-in, you should be good to go. 
+So if your development board or microcontroller has pull-ups built-in, you should be good to go.
 For example, the ESP32 DevKit 4 has pull-ups built-in, but the STM32 Nucleo does not.
 
 Pull-up resistors are connected from the SDA and SCL lines to the positive supply voltage. Standard resistor values are
@@ -56,7 +56,7 @@ The pull-up resistance value depends on various factors. If you can log the sign
 oscilloscope, you can check that the waveform of your I2C signals has sharp edges, indicating that your resistor setup
 is appropriate.
 
-For example, you observe the signal of a SEK SCD41 connected to a Nucleo 64 board. Neither the SEK SCD41 nor the STM 
+For example, you observe the signal of a SEK SCD41 connected to a Nucleo 64 board. Neither the SEK SCD41 nor the STM
 Nucleo 64 board includes pull-up resistors. Therefore, we need to connect a resistor between VDD and each SDA/SCL line,
 requiring one resistor per line.
 
@@ -84,7 +84,7 @@ Trace of setup with 18kOhm resistors:
 # ESP32 DevKitC - Wiring & Software Setup
 
 First, we need to define the pins we will use for the two I2C buses. For I2C bus A, we can use the default I2C pins
-of the board. For the ESP32 DevKitC, these are pin 21 (SCL) and pin 22 (SDA). For I2C bus B, we can choose any two 
+of the board. For the ESP32 DevKitC, these are pin 21 (SCL) and pin 22 (SDA). For I2C bus B, we can choose any two
 GPIO (General Purpose Input Output) pins.
 
 If you are using a different board, it is important to check the specifications to determine if any pins have special
@@ -98,15 +98,15 @@ For this example, the wiring should be carried out as follows:
 
 ![Wiring diagram SEK SCD41 to ESP32 DevKitC](images/wirigngTwoSCD41ToESP.png)
 
-    SEK-SCD41 A - Pin 1 to ESP32 Pin 22 (SCL, yellow cable) 
-    SEK-SCD41 A - Pin 2 to ESP32 GND (Ground, black cable) 
-    SEK-SCD41 A - Pin 3 to ESP32 3V3 (Sensor supply voltage, red cable) 
-    SEK-SCD41 A - Pin 4 to ESP32 Pin 21 (SDA, green cable) 
+    SEK-SCD41 A - Pin 1 to ESP32 Pin 22 (SCL, yellow cable)
+    SEK-SCD41 A - Pin 2 to ESP32 GND (Ground, black cable)
+    SEK-SCD41 A - Pin 3 to ESP32 3V3 (Sensor supply voltage, red cable)
+    SEK-SCD41 A - Pin 4 to ESP32 Pin 21 (SDA, green cable)
 
 
-    SEK-SCD41 B - Pin 1 to ESP32 Pin 17 (SCL, yellow cable) 
-    SEK-SCD41 B - Pin 2 to ESP32 GND (Ground, black cable) 
-    SEK-SCD41 B - Pin 3 to ESP32 5V (Sensor supply voltage, red cable) 
+    SEK-SCD41 B - Pin 1 to ESP32 Pin 17 (SCL, yellow cable)
+    SEK-SCD41 B - Pin 2 to ESP32 GND (Ground, black cable)
+    SEK-SCD41 B - Pin 3 to ESP32 5V (Sensor supply voltage, red cable)
     SEK-SCD41 B - Pin 4 to ESP32 Pin 16 (SDA, green cable)
 
 When configuring the software later on, it is important to remember the pins allocated for the second I2C bus.
@@ -130,7 +130,7 @@ Wire1.begin(sda_B, scl_B);
 
 Then, the code sending the commands to the sensors over the I2C bus needs to know which bus to use for which sensor.
 Thus, you need to configure the sensor instances accordingly. First, create a driver instance per sensor.
-This should be done globally, such that those can be referred to from within `setup()` and `loop()`.
+Their scope should be global, such that those can be referred to from within `setup()` and `loop()`.
 
 ```
 SensirionI2cScd4x sensorA;
@@ -155,9 +155,77 @@ sensorB.startMeasurement();
 ...
 ```
 
+# STM32 Nucleo 64 Board
+
+The STM32 Nucleo 64 board has pre-defined I2C pins. We use I2C1 (SDA on pin 14, SCL on pin 15) and 
+I2C2 (SDA on pin 3, SCL on pin 6). The Nucleo board nor the development kit board has pull-up resistors built in.
+Thus, we need to wire a resistosr in to each of the I2C communication lines. This can be done for example 
+by using a bread board so that no soldering is needed.
+
+![Wiring diagram SEK SCD41 to STM32 Nucleo 64 DevKitC](images/wirigngTwoSCD41ToSTM32Nucleo64.png)
+
+Names R.1 to R.4 stand for resistors with a value of 2.2kOhm.
+
+    SEK-SCD41 A Pin 1 to R.1 (SCL, yellow)
+    R.1 to Nucleo Pin 15 (SCL, yellow)
+    SEK-SCD41 A Pin 2 to Nucleo GND
+    SEK-SCD41 A Pin 3 to Nucleo 3V3
+    SEK-SCD41 A Pin 4 to R.2 (SDA, green)
+    R.2 to Nucleo Pin 14 (SDA, green)
+
+    SEK-SCD41 B Pin 1 to R.3 (SCL, yellow)
+    R.3 to Nucleo Pin 6 (SCL, yellow)
+    SEK-SCD41 B Pin 2 to ESP32 GND (Ground, black cable)
+    SEK-SCD41 B Pin 3 to ESP32 5V (Sensor supply voltage, red cable)
+    SEK-SCD41 B Pin 4 to R.4 (SDA, green)
+    R.4 to Nucleo Pin 3 (SDA, green)
+
+What we have to remember for the configuration in the software later is the pins we used for the I2C Buses.
+
+For configuring the I2C buses with the correct pins, we need to instantiate two TwoWire instances and pass 
+the pins to be used for the I2C communication.
+Their scope should be global, thus the definition is outside `setup()` and `loop()`.
+
+```
+// I2C Bus A on Pins 14 (SDA) / 15 (SCL)
+const int sda_A = 14;
+const int scl_A = 15;
+TwoWire i2cBusA(sda_A, scl_A);
+
+// I2C Bus B on Pins 3 (SDA) / 6 (SCL)
+const int sda_B = 3;
+const int scl_B = 6;
+TwoWire i2cBusB(sda_B, scl_B);
+```
+
+Then, the code sending the commands to the sensors over the I2C Bus needs to know wich bus to use for which sensor.
+Thus, you need to configure the sensors instances accordingly. First, create a driver instance per sensor.
+Their scope should be global, such that they can be refered to from within `setup()` and `loop()`.
+
+```
+SensirionI2cScd4x sensorA;
+SensirionI2cScd4x sensorB;
+```
+
+Then, in the `setup()` function, assign the I2C Buses to the sensors:
+
+```
+sensorA.begin(i2cBusA, SCD41_I2C_ADDR_62);
+sensorB.begin(i2cBusB, SCD41_I2C_ADDR_62);
+```
+
+You can now send any I2C command to the sensor, such as initiating the measurement and retrieving values.
+The complete example code is provided in the link.
+
+```
+sensorA.startMeasurement();
+sensorB.startMeasurement();
+...
+```
+
 # Other Boards - Wiring & Software setup
 
-For other boards, you find the default I2C wiring on: https://docs.arduino.cc/learn/communication/wire/
+For other Arduino boards, you find the default I2C wiring on: https://docs.arduino.cc/learn/communication/wire/
 
 Depending on your board and the implementation, there is a second Wire1 object predefined. If not, you have to dig one
 layer deeper and instantiate a TwoWire object and assign the correct pins. There is a good explanation with different
