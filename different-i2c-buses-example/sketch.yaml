@@ -1,9 +1,0 @@
-profiles:
-  espressif-esp32:
-    fqbn: esp32:esp32:esp32doit-devkit-v1
-    platforms:
-      - platform: esp32:esp32
-        source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-    libraries:
-      - Sensirion I2C SCD4x (1.0.0)
-      - Sensirion Core (0.7.0)
