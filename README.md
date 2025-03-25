@@ -168,17 +168,21 @@ Names R.1 to R.4 stand for resistors with a value of 2.2kOhm.
 
     SEK-SCD41 A Pin 1 to R.1 (SCL, yellow)
     R.1 to Nucleo Pin 15 (SCL, yellow)
+    R.1 to Nucleo 3V3
     SEK-SCD41 A Pin 2 to Nucleo GND
     SEK-SCD41 A Pin 3 to Nucleo 3V3
     SEK-SCD41 A Pin 4 to R.2 (SDA, green)
     R.2 to Nucleo Pin 14 (SDA, green)
+    R.2 to Nucleo 3V3
 
     SEK-SCD41 B Pin 1 to R.3 (SCL, yellow)
     R.3 to Nucleo Pin 6 (SCL, yellow)
+    R.3 to Nucleo 3V3
     SEK-SCD41 B Pin 2 to ESP32 GND (Ground, black cable)
     SEK-SCD41 B Pin 3 to ESP32 5V (Sensor supply voltage, red cable)
     SEK-SCD41 B Pin 4 to R.4 (SDA, green)
     R.4 to Nucleo Pin 3 (SDA, green)
+    R.4 to Nucleo 3V3
 
 What we have to remember for the configuration in the software later is the pins we used for the I2C Buses.
 
