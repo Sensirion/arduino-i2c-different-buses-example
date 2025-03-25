@@ -120,7 +120,7 @@ You can find more details and options how to configure several I2C buses on the 
 
 ## Example sketch
 
-You find a complete example under [different-i2c-buses-example.ino](different-i2c-buses-example/different-i2c-buses-example.ino). 
+You find a complete example under [differentI2cBusesExample.ino](differentI2cBusesExample/differentI2cBusesExample.ino). 
 Make sure to only have the define for your board `#define ESP32_DEVKITC_V4 1` uncommented, which you find at the beginning of the sketch.
 
 # STM32 Nucleo 64 Board
@@ -211,7 +211,7 @@ sensorB.startMeasurement();
 
 ## Example sketch
 
-You find a complete example under [different-i2c-buses-example.ino](different-i2c-buses-example/different-i2c-buses-example.ino). 
+You find a complete example under [differentI2cBusesExample.ino](differentI2cBusesExample/differentI2cBusesExample.ino). 
 Make sure to only have the define for your board `#define STM32_NUCLEO_64 1` uncommented, which you find at the beginning of the sketch.
 
 # Arduino Uno R4 WIFI
@@ -301,7 +301,7 @@ sensorOnQwiic.startMeasurement();
 
 ## Example sketch
 
-You find a complete example under [different-i2c-buses-example.ino](different-i2c-buses-example/different-i2c-buses-example.ino). 
+You find a complete example under [differentI2cBusesExample.ino](differentI2cBusesExample/differentI2cBusesExample.ino). 
 Make sure to only have the define for your board `#define ARDUINO_UNO_R4_WIFI 1` uncommented, which you find at the beginning of the sketch.
 
 # Other Ardiuino Boards
