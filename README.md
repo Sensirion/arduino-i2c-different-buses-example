@@ -3,26 +3,18 @@
 You have a micro controller and two identical sensors, meaning that they have the same I2C address. Without a multiplexer
 or the possibility to configure the I2C address of the sensor, you cannot attach them to the same I2C bus. However, on a
 board that provides the ability to configure any GPIO pin pairs as an I2C bus, you can connect the two sensors to their
-own individual I2C buses. In this article, we will explain how to set up separate I2C buses for each sensor.
-
-# The Ingredients
-
-In this example, we use an ESP32, which supports multiple I2C buses. You can use any two sensors, whether they are the
-same product or different sensors with the same I2C address. For this example, we will use two Sensirion SCD41 CO2
-sensors. To connect the sensors with cables without soldering, we use the Sensirion Development Kit Boards for the
-SCD41.
+own individual I2C buses. In this article, we will explain how to set up separate I2C buses for each sensor for a few different boards.
 
 # General working principle
 
 The two SCD41 sensors we want to connect have an I2C address of 0x62, which cannot be changed. Therefore, to communicate
 with both sensors from the micro controller, we will use a separate I2C bus for each. Each I2C bus requires one pin for
-the SDA line and one for the SCL line. The first sensor will be attached to the standard I2C pins. For the second I2C
-bus, we need to define two GPIO pins to use and connect the second sensor to those pins. On the software side, you can
-use the standard "Wire" library for the first sensor connected to the default pins. For the second sensor, we will need
-to configure it to use the chosen pins. As a final step, we will create two instances of our sensor driver class and
-initialize one with the standard I2C bus and the other with the custom I2C bus.
+the SDA line and one for the SCL line. Depending on the board and library implementation, we can either use pre-configured
+instances of the `Wire` library or we need to create our own instances of the `TwoWire` class and assign the pins used for 
+SDA and SCL lines. As a final step, we will create two instances of our sensor driver class and
+initialize one with the first I2C bus and the other with the second I2C bus.
 
-# ESP32 DevKitC - Wiring & Software Setup
+# ESP32 DevKitC
 
 ## Wiring
 
