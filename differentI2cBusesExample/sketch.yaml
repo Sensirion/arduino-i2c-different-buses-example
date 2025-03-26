@@ -1,0 +1,8 @@
+profiles:
+  arduino-uno-r4:
+    fqbn: arduino:renesas_uno:unor4wifi
+    platforms:
+      - platform: arduino:renesas_uno (1.4.1)
+    libraries:
+      - Sensirion I2C SCD4x (1.0.0)
+      - Sensirion Core (0.7.0)
