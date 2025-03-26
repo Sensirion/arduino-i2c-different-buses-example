@@ -26,21 +26,21 @@ If you are using a different board, it is important to check the specifications 
 configurations that prevent them from being used as GPIO pins. In our case, we have selected pins 17 and 16 for
 I2C bus B.
 
-## Pull-up resistors
+### Pull-up resistors
 
 Having pull-up resistors in place on the I2C data (SDA) and clock (SCL) lines is important to have a good signal quality and robust communication. You can read more about it on [I2C Pull-Up Resistors Intro](i2c-pull-up-resistors-intro.md)
 
 The ESP32 DevKitC Board ensures that GPIO lines are automatically pulled to a high state. Therefore, there is no need to
 manually wire or configure pull-up resistors for the pins you intend to use.
 
-## Wiring diagram
+### Wiring diagram
 
 Since the SCD41 sensor is compatible with both 3.3V and 5V, we can connect one sensor to the 3.3V pin and the other to
 the 5V pin. If both sensors require the same voltage, they can be connected through a breadboard.
 
 For this example, the wiring should be carried out as follows:
 
-![Wiring diagram SEK SCD41 to ESP32 DevKitC](images/wirigngTwoSCD41ToESP.png)
+![Wiring diagram SEK SCD41 to ESP32 DevKitC](images/wiringTwoSCD41ToESP.png)
 
 - SEK-SCD41 A - Pin 1 to ESP32 Pin 22 (SCL, yellow cable)
 - SEK-SCD41 A - Pin 2 to ESP32 GND (Ground, black cable)
@@ -124,11 +124,11 @@ I2C2 (SDA on pin 3, SCL on pin 6).
 
 ### Pull Ups
 The Nucleo board nor the development kit board has pull-up resistors built in.
-Thus, we need to wire a resistosr in to each of the I2C communication lines. Four 8.26kOhm resistors were used in
+Thus, we need to wire a resistor into each of the I2C communication lines. Four 8.26kOhm resistors were used in
 this example and the wiring was done using a bread board so that no soldering was needed.
 
 ### Wiring diagram
-![Wiring diagram SEK SCD41 to STM32 Nucleo 64 DevKitC](images/wirigngTwoSCD41ToSTM32Nucleo64.png)
+![Wiring diagram SEK SCD41 to STM32 Nucleo 64 DevKitC](images/wiringTwoSCD41ToSTM32Nucleo64.png)
 
 Names R.1 to R.4 stand for resistors with a value of 8.26kOhm.
 
@@ -176,9 +176,9 @@ const int scl_B = 6;
 TwoWire i2cBusB(sda_B, scl_B);
 ```
 
-Then, the code sending the commands to the sensors over the I2C Bus needs to know wich bus to use for which sensor.
+Then, the code sending the commands to the sensors over the I2C Bus needs to know which bus to use for which sensor.
 Thus, you need to configure the sensors instances accordingly. First, create a driver instance per sensor.
-Their scope should be global, such that they can be refered to from within `setup()` and `loop()`.
+Their scope should be global, such that they can be referred to from within `setup()` and `loop()`.
 
 ```
 SensirionI2cScd4x sensorA;
@@ -210,12 +210,12 @@ Make sure to only have the define for your board `#define STM32_NUCLEO_64 1` unc
 
 # Wiring
 
-The Arduino Uno R4 WIFI provides one I2C bus on the pin header, which has no pullups on the board.
+The Arduino Uno R4 WIFI provides one I2C bus on the pin header, which has no pull-ups on the board.
 Thus, we need to connect a pull up resistor between SDA and VDD and SCL and VDD. 
 In the example two 2.2kOhm resistors were used.
 
 The second I2C bus is on the Qwiic. We use here the breakout board from Adafruit.
-The board includes 10K pullup on SDA and SCL.
+The board includes 10K pull-up on SDA and SCL.
 
 ### Pull Ups
 
@@ -226,16 +226,16 @@ Thus, we need to connect a pull-up resistor between SDA and VDD and SCL and VDD.
 this example and the wiring was done using a bread board so that no soldering was needed.
 
 The second sensor is on a Adafruit breakout board. This one includes a pull-up resistor. Thus,
-no pull-up resitors have to be wired into this connection, for which a Qwiic cable is used.
+no pull-up resistors have to be wired into this connection, for which a Qwiic cable is used.
 
-# Wiring diagram
+### Wiring diagram
 
-![Wiring diagram SEK SCD41 and Adafruit SCD41 to Arduino Uno R4](images/wirigngTwoSCD41ToSTM32Nucleo64.png)
+![Wiring diagram SEK SCD41 and Adafruit SCD41 to Arduino Uno R4](images/wiringTwoSCD41ToSTM32Nucleo64.png)
 
 The list below describes the wiring, where R.1 and R.2 are resistors with a value of 8.26kOhm.
 
 - SEK-SCD41 Pin 1 to R.1 (SCL, yellow)
-- R.1 to Ardunio Pin SCL (yellow)
+- R.1 to Arduino Pin SCL (yellow)
 - R.1 to Arduino 3V3
 - SEK-SCD41 Pin 2 to Arduino GND
 - SEK-SCD41 Pin 3 to Arduino 3V3
@@ -296,7 +296,7 @@ sensorOnQwiic.startMeasurement();
 You find a complete example under [differentI2cBusesExample.ino](differentI2cBusesExample/differentI2cBusesExample.ino). 
 Make sure to only have the define for your board `#define ARDUINO_UNO_R4_WIFI 1` uncommented, which you find at the beginning of the sketch.
 
-# Other Ardiuino Boards
+# Other Arduino Boards
 
 Documentation for Arduino boards can be found under [Arduino Wire Library](https://docs.arduino.cc/language-reference/en/functions/communication/wire/).
 
