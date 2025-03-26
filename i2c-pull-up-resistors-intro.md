@@ -56,3 +56,58 @@ reach the maximum voltage anymore (the maximum voltage reached in the trace duri
 
 Trace of setup with 18kOhm resistors:
 ![LogicAnalyzer Snapshot with 18kOhm resistors](images/Nucleo64_I2c_18kOhm_PullUps.png)
+
+# Arduino boards
+
+Most of the Arduino boards do have pull-up resistors on the board which will be activated on the I2C pins when you call 
+`Wire.begin()`. Those have however a high resistance value and are not appropriate for all setups. The internal pull-ups 
+are likely too weak to recover the line fast enough to a high state, especially with faster I2C bus frequencies than 
+the default of 100kHz. If pull ups are too weak, it might lead to unreliable or no communication over I2C.
+
+
+With the internal pull-ups and 100kHz, I2C communication is working. The I2C signal is however not very good as there 
+is no plateau on the high state, but rise time is still fast enough with 100kHz. 
+
+![ArduinoNano_InternalPullUps_100kHz_working](images/ArduinoNano_InternalPullUps_100kHz_working.png)
+
+If we switch to 400kHz, we cannot communicate anymore if the internal pull-ups are turned on. No signal was detected
+anymore at all. You see in the screen shot above that if the clock speed would be 4 times faster, signal would have
+to be on high state within the reddish box - which is far from 3V.
+
+To solve the problem, you need to deactivate the internal pull up resistors and connect external pull up resistors.
+Deactivating the internal pull up resistors is done in the code. Make sure to have those calls after the `Wire.begin()`,
+as the begin configures the I2C pins to INPUT_PULLUP. Same is true for the I2C clock, you have to configure it after
+the call to begin, as otherwise it will overwrite it with the default of 100kHz.
+
+The code below was tested on a Arduino Nano. It turns off the internal pull ups and configures I2C fast mode with 400kHz
+bus frequency. For other boards, you might need to adapt the pin names (here A4, A5).
+
+```
+Wire.begin();
+Wire.setClock(400000L);
+pinMode(A4, INPUT);
+pinMode(A5, INPUT);
+```
+
+Choosing the correct pull-up resistor value is important. Further, short cables are also important for a good I2C signal,
+as the capacitance of the cable also influences the rise time.
+
+For an example how to wire external pull ups between SDA respectively SCL and VDD using a bread board please check out
+the examples in the [README](README.md).
+
+Following screenshots show the decrease in I2C signal quality depending on resistor values.
+You can see that with the strong pull-up with 2.2kOhm resistor the signal looks quite rectangular.
+With 8.3kOhm the pull-up is still just strong enough, but the signal has no plateau anymore.
+Resistors of 18kOhm are too weak to pull-up the line fast enough into high state and the communication is not working anymore.
+
+I2C bus frequency 400kHz, external pull-up resistors 2.2kOhm, good signal, communication is working:
+
+![I2C bus frequency 400kHz, external pull-up resistors 2.2kOhm](images/ArduinoNano_External2.2kOhm_400kHz_working.png)
+
+I2C bus frequency 400kHz, external pull-up resistors 8.3kOhm, weak signal, communication is working:
+
+![I2C bus frequency 400kHz, external pull-up resistors 8.3kOhm](images/ArduinoNano_External8.3kOhm_400Hz_working.png)
+
+I2C bus frequency 400kHz, external pull-up resistors 18kOhm, signal does not recover to high state, communication is **not** working:
+
+![I2C bus frequency 400kHz, external pull-up resistors 18kOhm](images/ArduinoNano_External18kOhm_400kHz_not_working.png)
