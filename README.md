@@ -53,7 +53,7 @@ For this example, the wiring should be carried out as follows:
 - SEK-SCD41 B - Pin 4 to ESP32 Pin 16 (SDA, green cable)
 
 When configuring the software later on, it is important to remember the pins allocated for the second I2C bus.
-Specifically, we used pin 17 for the I2C clock (SCL) and pin 18 for the I2C data (SDA).
+Specifically, we used pin 17 for the I2C clock (SCL) and pin 16 for the I2C data (SDA).
 
 ## Software setup
 
@@ -144,8 +144,8 @@ Names R.1 to R.4 stand for resistors with a value of 8.26kOhm.
 - SEK-SCD41 B Pin 1 to R.3 (SCL, yellow)
 - R.3 to Nucleo Pin 6 (SCL, yellow)
 - R.3 to Nucleo 3V3
-- SEK-SCD41 B Pin 2 to ESP32 GND (Ground, black cable)
-- SEK-SCD41 B Pin 3 to ESP32 5V (Sensor supply voltage, red cable)
+- SEK-SCD41 B Pin 2 to Nucleo GND (Ground, black cable)
+- SEK-SCD41 B Pin 3 to Nucleo 5V (Sensor supply voltage, red cable)
 - SEK-SCD41 B Pin 4 to R.4 (SDA, green)
 - R.4 to Nucleo Pin 3 (SDA, green)
 - R.4 to Nucleo 3V3
@@ -230,7 +230,7 @@ no pull-up resistors have to be wired into this connection, for which a Qwiic ca
 
 ### Wiring diagram
 
-![Wiring diagram SEK SCD41 and Adafruit SCD41 to Arduino Uno R4](images/wiringTwoSCD41ToSTM32Nucleo64.png)
+![Wiring diagram SEK SCD41 and Adafruit SCD41 to Arduino Uno R4](images/wiringTwoSCD41ToArduinoUnoR4.png)
 
 The list below describes the wiring, where R.1 and R.2 are resistors with a value of 8.26kOhm.
 
