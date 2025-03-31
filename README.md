@@ -28,7 +28,8 @@ I2C bus B.
 
 ### Pull-up resistors
 
-Having pull-up resistors in place on the I2C data (SDA) and clock (SCL) lines is important to have a good signal quality and robust communication. You can read more about it on [I2C Pull-Up Resistors Intro](i2c-pull-up-resistors-intro.md)
+Having pull-up resistors in place on the I2C data (SDA) and clock (SCL) lines is important to have a good signal quality and robust communication.
+You can read more about it on [I2C Pull-Up Resistors Intro](i2c-pull-up-resistors-intro.md)
 
 The ESP32 DevKitC Board ensures that GPIO lines are automatically pulled to a high state. Therefore, there is no need to
 manually wire or configure pull-up resistors for the pins you intend to use.
@@ -42,15 +43,17 @@ For this example, the wiring should be carried out as follows:
 
 ![Wiring diagram SEK SCD41 to ESP32 DevKitC](images/wiringTwoSCD41ToESP.png)
 
-- SEK-SCD41 A - Pin 1 to ESP32 Pin 22 (SCL, yellow cable)
-- SEK-SCD41 A - Pin 2 to ESP32 GND (Ground, black cable)
-- SEK-SCD41 A - Pin 3 to ESP32 3V3 (Sensor supply voltage, red cable)
-- SEK-SCD41 A - Pin 4 to ESP32 Pin 21 (SDA, green cable)
 
-- SEK-SCD41 B - Pin 1 to ESP32 Pin 17 (SCL, yellow cable)
-- SEK-SCD41 B - Pin 2 to ESP32 GND (Ground, black cable)
-- SEK-SCD41 B - Pin 3 to ESP32 5V (Sensor supply voltage, red cable)
-- SEK-SCD41 B - Pin 4 to ESP32 Pin 16 (SDA, green cable)
+| Sensor board        | ESP32  | Cable color | Description |
+|---------------------|--------|-------------|-------------|
+| SEK-SCD41 A - Pin 1 | Pin 22 | yellow | SCL    |
+| SEK-SCD41 A - Pin 2 | GND    | black | Ground |
+| SEK-SCD41 A - Pin 3 | 3V3    | red | Sensor supply voltage 3-5V | 
+| SEK-SCD41 A - Pin 4 | Pin 21 | green | SDA |  
+| SEK-SCD41 B - Pin 1 | Pin 17 | yellow | SCL |
+| SEK-SCD41 B - Pin 2 | GND | black | Ground |
+| SEK-SCD41 B - Pin 3 | 5V | red | Sensor supply voltage 3-5V | 
+| SEK-SCD41 B - Pin 4 | Pin 16 | green | SDA |
 
 When configuring the software later on, it is important to remember the pins allocated for the second I2C bus.
 Specifically, we used pin 17 for the I2C clock (SCL) and pin 16 for the I2C data (SDA).
@@ -112,8 +115,7 @@ You can find more details and options how to configure several I2C buses on the 
 
 ## Example sketch
 
-You find a complete example under [differentI2cBusesExample.ino](differentI2cBusesExample/differentI2cBusesExample.ino). 
-Make sure to only have the define for your board `#define ESP32_DEVKITC_V4 1` uncommented, which you find at the beginning of the sketch.
+You find a complete example under [exampleESP32DevKitCV4](exampleESP32DevKitCV4/exampleESP32DevKitCV4.ino)
 
 # STM32 Nucleo 64 Board
 
@@ -123,6 +125,10 @@ The STM32 Nucleo 64 board has pre-defined I2C pins. We use I2C1 (SDA on pin 14, 
 I2C2 (SDA on pin 3, SCL on pin 6). 
 
 ### Pull Ups
+
+Having pull-up resistors in place on the I2C data (SDA) and clock (SCL) lines is important to have a good signal quality and robust communication.
+You can read more about it on [I2C Pull-Up Resistors Intro](i2c-pull-up-resistors-intro.md)
+
 The Nucleo board nor the development kit board has pull-up resistors built in.
 Thus, we need to wire a resistor into each of the I2C communication lines. Four 8.26kOhm resistors were used in
 this example and the wiring was done using a bread board so that no soldering was needed.
@@ -132,23 +138,24 @@ this example and the wiring was done using a bread board so that no soldering wa
 
 Names R.1 to R.4 stand for resistors with a value of 8.26kOhm.
 
-- SEK-SCD41 A Pin 1 to R.1 (SCL, yellow)
-- R.1 to Nucleo Pin 15 (SCL, yellow)
-- R.1 to Nucleo 3V3
-- SEK-SCD41 A Pin 2 to Nucleo GND
-- SEK-SCD41 A Pin 3 to Nucleo 3V3
-- SEK-SCD41 A Pin 4 to R.2 (SDA, green)
-- R.2 to Nucleo Pin 14 (SDA, green)
-- R.2 to Nucleo 3V3
-
-- SEK-SCD41 B Pin 1 to R.3 (SCL, yellow)
-- R.3 to Nucleo Pin 6 (SCL, yellow)
-- R.3 to Nucleo 3V3
-- SEK-SCD41 B Pin 2 to Nucleo GND (Ground, black cable)
-- SEK-SCD41 B Pin 3 to Nucleo 5V (Sensor supply voltage, red cable)
-- SEK-SCD41 B Pin 4 to R.4 (SDA, green)
-- R.4 to Nucleo Pin 3 (SDA, green)
-- R.4 to Nucleo 3V3
+| Sensor Board / Resistor   | STM32 Nucleo 64 / Resistor | Cable color | Description |
+|--------------------------------|----------------------------|-------------|-------------|
+| SEK-SCD41 A Pin 1 | R.1 | yellow | SCL |
+| R.1 | Nucleo Pin 15 | yellow | SCL |
+| R.1 | Nucleo 3V3 |  | Reference Voltage |
+| SEK-SCD41 A Pin 2 | Nucleo GND | black |Ground |
+| SEK-SCD41 A Pin 3 | Nucleo 3V3 | red | Sensor Supply Voltage 3-5V | 
+| SEK-SCD41 A Pin 4 | R.2 | green | SDA |
+| R.2 | Nucleo Pin 14 | green | SDA |
+| R.2 | Nucleo 3V3 | | Reference Voltage |
+| SEK-SCD41 B Pin 1 | R.3 | yellow | SCL |
+| R.3 | Nucleo Pin 6 | yellow | SCL |
+| R.3 | Nucleo 3V3 | | Reference Voltage |
+| SEK-SCD41 B Pin 2 | Nucleo GND | black | Ground |
+| SEK-SCD41 B Pin 3 | Nucleo 5V | red | Sensor supply voltage 3-5V |
+| SEK-SCD41 B Pin 4 | R.4 | green | SDA |
+| R.4 | Nucleo Pin 3 | green | SDA|
+| R.4 | Nucleo 3V3 | | Reference Voltage |
 
 What we have to remember for the configuration in the software later is the pins we used for the I2C buses.
 
@@ -203,8 +210,7 @@ sensorB.startMeasurement();
 
 ## Example sketch
 
-You find a complete example under [differentI2cBusesExample.ino](differentI2cBusesExample/differentI2cBusesExample.ino). 
-Make sure to only have the define for your board `#define STM32_NUCLEO_64 1` uncommented, which you find at the beginning of the sketch.
+You find a complete example under [exampleSTM32Nucleo64](exampleSTM32Nucleo64/exampleSTM32Nucleo64.ino).
 
 # Arduino Uno R4 WIFI
 
@@ -218,6 +224,9 @@ The second I2C bus is on the Qwiic. We use here the breakout board from Adafruit
 The board includes 10K pull-up on SDA and SCL.
 
 ### Pull Ups
+
+Having pull-up resistors in place on the I2C data (SDA) and clock (SCL) lines is important to have a good signal quality and robust communication.
+You can read more about it on [I2C Pull-Up Resistors Intro](i2c-pull-up-resistors-intro.md)
 
 The Arduino Uno R4 WIFI provides no pull-ups on the board.
 
@@ -234,16 +243,17 @@ no pull-up resistors have to be wired into this connection, for which a Qwiic ca
 
 The list below describes the wiring, where R.1 and R.2 are resistors with a value of 8.26kOhm.
 
-- SEK-SCD41 Pin 1 to R.1 (SCL, yellow)
-- R.1 to Arduino Pin SCL (yellow)
-- R.1 to Arduino 3V3
-- SEK-SCD41 Pin 2 to Arduino GND
-- SEK-SCD41 Pin 3 to Arduino 3V3
-- SEK-SCD41 Pin 4 to R.2 (SDA, green)
-- R.2 to Arduino Pin 14 (green)
-- R.2 to Arduino 3V3
-
-- Adafruit SCD41 to Arduino Qwiic
+| Sensor board / Resistor | Arduino / Resistor  | Cable color | Description |
+|-------------------------|---------------------|-------------|-------------|
+| SEK-SCD41 Pin 1 | R.1 | yellow | SCL |
+| R.1 | Arduino Pin SCL |yellow | SCL |
+| R.1 | Arduino 3V3 | | I2C reference voltage |
+| SEK-SCD41 Pin 2 | Arduino GND | Ground |
+| SEK-SCD41 Pin 3 | Arduino 3V3 | Sensor supply voltage 3-5V |
+| SEK-SCD41 Pin 4 | R.2 | green | SDA |
+| R.2 | Arduino Pin 14 | green | SDA |
+| R.2 | Arduino 3V3 | | I2C reference voltage |
+| Adafruit SCD41 (includes Pull-Ups) | Arduino Qwiic connector | | Qwiic cable with SCL, GND, VDD, SDA lines |
 
 
 ## Software setup
@@ -293,8 +303,7 @@ sensorOnQwiic.startMeasurement();
 
 ## Example sketch
 
-You find a complete example under [differentI2cBusesExample.ino](differentI2cBusesExample/differentI2cBusesExample.ino). 
-Make sure to only have the define for your board `#define ARDUINO_UNO_R4_WIFI 1` uncommented, which you find at the beginning of the sketch.
+You find a complete example under [exampleArduinoUnoR4](exampleArduinoUnoR4/exampleArduinoUnoR4.ino).
 
 # Other Arduino Boards
 

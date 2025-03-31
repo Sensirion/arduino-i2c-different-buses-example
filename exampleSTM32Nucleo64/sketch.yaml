@@ -1,0 +1,9 @@
+profiles:
+  stm32-nucleo64:
+    fqbn: STMicroelectronics:stm32:Nucleo_64:pnum=NUCLEO_F401RE
+    platforms:
+      - platform: STMicroelectronics:stm32 (2.10.1)
+        platform_index_url: https://github.com/stm32duino/BoardManagerFiles/raw/main/package_stmicroelectronics_index.json
+    libraries:
+      - Sensirion I2C SCD4x (1.0.0)
+      - Sensirion Core (0.7.0)
