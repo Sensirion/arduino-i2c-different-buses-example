@@ -214,7 +214,7 @@ You find a complete example under [exampleSTM32Nucleo64](exampleSTM32Nucleo64/ex
 
 # Arduino Uno R4 WIFI
 
-# Wiring
+## Wiring
 
 The Arduino Uno R4 WIFI provides one I2C bus on the pin header, which has no pull-ups on the board.
 Thus, we need to connect a pull up resistor between SDA and VDD and SCL and VDD. 
