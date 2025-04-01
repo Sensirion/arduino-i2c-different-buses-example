@@ -28,6 +28,14 @@ jobs:
           export PATH=$PATH:$CLI_PATH
           curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=$CLI_PATH sh
 
-      - name: build sketch
+      - name: build arduino r4 sketch
         run: |
-          ${CLI_PATH}/arduino-cli compile --profile arduino-uno-r4 ./differentI2cBusesExample
+          ${CLI_PATH}/arduino-cli compile --profile arduino-uno-r4 ./exampleArduinoUnoR4
+
+      - name: build ESP32 DevKit sketch
+        run: |
+          ${CLI_PATH}/arduino-cli compile --profile esp32-devkitC-v4 ./exampleESP32DevKitCV4
+
+      - name: build Nucleo sketch
+        run: |
+          ${CLI_PATH}/arduino-cli compile --profile  stm32-nucleo64 ./exampleSTM32Nucleo64

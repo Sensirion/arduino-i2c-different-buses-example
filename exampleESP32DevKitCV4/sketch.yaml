@@ -1,0 +1,8 @@
+profiles:
+  esp32-devkitC-v4:
+    fqbn: esp32:esp32:esp32doit-devkit-v1
+    platforms:
+      - platform: esp32:esp32 (3.1.3)
+    libraries:
+      - Sensirion I2C SCD4x (1.0.0)
+      - Sensirion Core (0.7.0)
