@@ -121,8 +121,9 @@ You find a complete example under [exampleESP32DevKitCV4](exampleESP32DevKitCV4/
 
 ## Wiring 
 
-The STM32 Nucleo 64 board has pre-defined I2C pins. We use I2C1 (SDA on pin 14, SCL on pin 15) and 
-I2C2 (SDA on pin 3, SCL on pin 6). 
+The STM32 Nucleo 64 F401RE board has predefined I2C pins. 
+We connect to the Arduino Pin Header of the board and use the predefined pins for I2C1 and I2C2.
+More info about the STM32 Nucleo 64 F401RE Board can be found on st.com.
 
 ### Pull Ups
 
@@ -138,24 +139,24 @@ this example and the wiring was done using a bread board so that no soldering wa
 
 Names R.1 to R.4 stand for resistors with a value of 8.26kOhm.
 
-| Sensor Board / Resistor   | STM32 Nucleo 64 / Resistor | Cable color | Description |
+| Sensor Board / Resistor   | STM32 Nucleo 64 Arduino Connector / Resistor | Cable color | Description |
 |--------------------------------|----------------------------|-------------|-------------|
 | SEK-SCD41 A Pin 1 | R.1 | yellow | SCL |
-| R.1 | Nucleo Pin 15 | yellow | SCL |
-| R.1 | Nucleo 3V3 |  | Reference Voltage |
-| SEK-SCD41 A Pin 2 | Nucleo GND | black |Ground |
-| SEK-SCD41 A Pin 3 | Nucleo 3V3 | red | Sensor Supply Voltage 3-5V | 
+| R.1 | Pin 15 | yellow | SCL |
+| R.1 | 3V3 |  | Reference Voltage |
+| SEK-SCD41 A Pin 2 |  GND | black |Ground |
+| SEK-SCD41 A Pin 3 |  3V3 | red | Sensor Supply Voltage 3-5V | 
 | SEK-SCD41 A Pin 4 | R.2 | green | SDA |
-| R.2 | Nucleo Pin 14 | green | SDA |
-| R.2 | Nucleo 3V3 | | Reference Voltage |
+| R.2 | Pin 14 | green | SDA |
+| R.2 | 3V3 | | Reference Voltage |
 | SEK-SCD41 B Pin 1 | R.3 | yellow | SCL |
-| R.3 | Nucleo Pin 6 | yellow | SCL |
-| R.3 | Nucleo 3V3 | | Reference Voltage |
-| SEK-SCD41 B Pin 2 | Nucleo GND | black | Ground |
-| SEK-SCD41 B Pin 3 | Nucleo 5V | red | Sensor supply voltage 3-5V |
+| R.3 | Pin 6 | yellow | SCL |
+| R.3 | 3V3 | | Reference Voltage |
+| SEK-SCD41 B Pin 2 |  GND | black | Ground |
+| SEK-SCD41 B Pin 3 |  5V | red | Sensor supply voltage 3-5V |
 | SEK-SCD41 B Pin 4 | R.4 | green | SDA |
-| R.4 | Nucleo Pin 3 | green | SDA|
-| R.4 | Nucleo 3V3 | | Reference Voltage |
+| R.4 | Pin 3 | green | SDA|
+| R.4 | 3V3 | | Reference Voltage |
 
 What we have to remember for the configuration in the software later is the pins we used for the I2C buses.
 
